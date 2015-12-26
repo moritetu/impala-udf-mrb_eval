@@ -1,0 +1,15 @@
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+cmake_install.cmake
+install_manifest.txt
+*.o
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+vendor/
+/mrb_eval-test
+!.gitkeep
