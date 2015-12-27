@@ -87,7 +87,7 @@ $ hdfs dfs -copyFromLocal $TARGET /path/to/
 $ impala-shell -i impala_host
 
 > create function mrb_eval(string) returns string location '/path/to/$TARGET' symbol='MRBEval';
-> select mrb_eval('(1..3).reduce($:+)');
+> select mrb_eval('(1..3).reduce(&:+)');
 Query: select mrb_eval('(1..3).reduce(&:+)')
 +----------------------------------------+
 | default.mrb_eval('(1..3).reduce(&:+)') |
