@@ -17,7 +17,7 @@ StringVal MRBEval(FunctionContext* context, const StringVal& rb_code)
   }
 
   mrb_state *mrb = mrb_open();
-  mrb_value value = mrb_load_string(mrb, reinterpret_cast<char*>(rb_code.ptr));
+  mrb_value value = mrb_load_nstring(mrb, reinterpret_cast<char*>(rb_code.ptr), rb_code.len);
   if (mrb->exc) {
     mrb_close(mrb);
     return StringVal::null();
