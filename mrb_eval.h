@@ -5,6 +5,8 @@
 
 using namespace impala_udf;
 
+void MRBEvalPrepare(FunctionContext* context, FunctionContext::FunctionStateScope scope);
+void MRBEvalClose(FunctionContext* context, FunctionContext::FunctionStateScope scope);
 StringVal MRBEval(FunctionContext* context, const StringVal& rb_code);
 
 #endif

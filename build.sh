@@ -22,7 +22,7 @@ EOF
 #   # do something
 # }
 #
-exec_if() {
+exec_target_if() {
   local target="$1"
 
   if [ ${TARGETS[$target]:-0} -eq 1 ]; then
@@ -57,11 +57,11 @@ do
   shift
 done
 
-exec_if "clean" && {
+exec_target_if "clean" && {
   rm -rf vendor
 }
 
-exec_if "libmruby.a" && {
+exec_target_if "libmruby.a" && {
   (
     mkdir -p vendor
     if [ ! -d vendor/mruby ]; then
@@ -72,7 +72,7 @@ exec_if "libmruby.a" && {
   )
 }
 
-exec_if "libmrb_eval.so" && {
+exec_target_if "libmrb_eval.so" && {
   TARGET=libmrb_eval.so
   cmake . && make
 
@@ -86,7 +86,7 @@ Copy $TARGET to the arbitrary path on HDFS and create mrb_eval function in Impal
 $ hdfs dfs -copyFromLocal $TARGET /path/to/
 $ impala-shell -i impala_host
 
-> create function mrb_eval(string) returns string location '/path/to/$TARGET' symbol='MRBEval';
+> create function mrb_eval(string) returns string location '/path/to/$TARGET' symbol='MRBEval' prepare_fn='MRBEvalPrepare' close_fn='MRBEvalClose';
 > select mrb_eval('(1..3).reduce(&:+)');
 Query: select mrb_eval('(1..3).reduce(&:+)')
 +----------------------------------------+
@@ -100,6 +100,6 @@ EOF
     fi
 }
 
-exec_if "test" && {
+exec_target_if "test" && {
   ./mrb_eval-test
 }

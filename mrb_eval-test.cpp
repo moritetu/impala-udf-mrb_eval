@@ -14,7 +14,11 @@ int main(int argc, char* argv[])
   passed &= UdfTestHarness::ValidateUdf<StringVal, StringVal>(
     MRBEval, StringVal("invalid ruby code"), StringVal::null());
   passed &= UdfTestHarness::ValidateUdf<StringVal, StringVal>(
+    MRBEval, StringVal("raise \"raise error returns null\""), StringVal::null());
+  passed &= UdfTestHarness::ValidateUdf<StringVal, StringVal>(
     MRBEval, StringVal("(1..3).reduce(&:+)"), StringVal("6"));
+  passed &= UdfTestHarness::ValidateUdf<StringVal, StringVal>(
+    MRBEval, StringVal("class Hello; def self.say(name); \"hello #{name}\"; end; end; Hello.say \"mrb_eval\""), StringVal("hello mrb_eval"));
 
   cout << "Tests " << (passed ? "Passed." : "Failed.") << endl;
   return !passed;
