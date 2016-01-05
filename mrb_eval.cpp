@@ -1,4 +1,5 @@
 #include <string>
+#include <cassert>
 #include "mrb_eval.h"
 #include "mruby.h"
 #include "mruby/compile.h"
@@ -44,8 +45,8 @@ void MRBEvalClose(FunctionContext* context, FunctionContext::FunctionStateScope 
 }
 
 static StringVal MRBEvalRun(FunctionContext *context,
-				mrb_state *mrb,
-				const StringVal& rb_code)
+                            mrb_state *mrb,
+                            const StringVal& rb_code)
 {
   ARENA_SAVE;
   mrb_value value = mrb_load_nstring(mrb, reinterpret_cast<char*>(rb_code.ptr), rb_code.len);
@@ -56,9 +57,11 @@ static StringVal MRBEvalRun(FunctionContext *context,
     mrb->exc = 0;
   } else {
     const char *retstr = mrb_string_value_ptr(mrb, value);
-    retval = StringVal::CopyFrom(context,
-				 reinterpret_cast<const uint8_t*>(retstr),
-				 strlen(retstr));
+    int len = strlen(retstr);
+    StringVal result(context, len);
+    memcpy(result.ptr, retstr, len);
+    // copy pointer and len
+    retval = result;
   }
   ARENA_RESTORE;
   return retval;

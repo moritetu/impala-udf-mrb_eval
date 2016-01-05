@@ -1,12 +1,24 @@
 # impala-udf-mrb_eval
 
 NOTE: This is an experimental implementation.
+For huge data, this cannot make a good performance.
 
 ## Build
+
+You have to install the following libraries.
+
+```
+sudo yum install gcc-c++ cmake boost-devel
+sudo yum install impala-udf-devel
+```
+
+Then execute the following command.
 
 ```sh
 sh build.sh
 ```
+
+If you can build successfully, you will see `libmrb_eval.so` in the project top.
 
 ## Usage
 
@@ -21,4 +33,3 @@ Query: select mrb_eval('(1..3).reduce(&:+)')
 +----------------------------------------+
 Fetched 1 row(s) in 0.02s
 ```
-
